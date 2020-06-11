@@ -14,6 +14,16 @@ from typing import Dict
 from userge import userge, Filters, Message, Config, get_collection
 from userge.utils import SafeDict
 
+output_q = f'''
+	    This is automated message
+
+    My master hasn't approved you to PM
+   Please wait for my master to look in
+        he mostly approves PMs
+
+	<strong>DON'T SPAM UNTILL THEN</strong>
+  '''
+
 CHANNEL = userge.getCLogger(__name__)
 SAVED_SETTINGS = get_collection("CONFIGS")
 ALLOWED_COLLECTION = get_collection("PM_PERMIT")
@@ -21,9 +31,7 @@ ALLOWED_COLLECTION = get_collection("PM_PERMIT")
 allowAllPms = True
 pmCounter: Dict[int, int] = {}
 allowAllFilter = Filters.create(lambda _, query: bool(allowAllPms))
-noPmMessage = ("Hello {fname} this is an automated message\n"
-               "Please wait untill you get approved to direct message "
-               "And please dont spam untill then ")
+noPmMessage = (output_q)
 
 
 async def _init() -> None:
@@ -177,7 +185,7 @@ async def uninvitedPmHandler(message: Message):
     else:
         pmCounter.update({message.from_user.id: 1})
         await message.reply(
-            noPmMessage.format_map(SafeDict(**user_dict)) + '\n`- Protected by userge`')
+            noPmMessage.format_map(SafeDict(**user_dict)) + '\n`- Protected by UBotz`')
         await asyncio.sleep(1)
         await CHANNEL.log(f"#NEW_MESSAGE\n{user_dict['mention']} has messaged you")
 
